@@ -1,10 +1,10 @@
-# 🎓 Campus Skill-Swap (SkillShare)
+# SkillShare
 
 A peer-to-peer campus micro-help and skill exchange platform built for university students. It features a localized credit-based economy to encourage mutual learning, collaboration, and resource sharing.
 
 ## ✨ Key Features
 
-* **Campus Domain Auth:** Restricts access to verified college email handles (`@chitkara.edu.in`) ensuring a secure, student-only environment.
+* **Campus Domain Auth:** Restricts access to verified college email handles (`@mail.edu.in`) ensuring a secure, student-only environment.
 * **Credit-Based Economy:** 
   * New users start with **200 Credits**.
   * Earn **+10 Credits** for offering help to batchmates.
@@ -18,7 +18,7 @@ A peer-to-peer campus micro-help and skill exchange platform built for universit
 * **Frontend:** React.js, JavaScript (ES6+)
 * **Build Tool:** Vite
 * **Styling:** CSS3 (Flexbox, CSS Grid, Custom Variables)
-* **State Management:** React `useState` & Browser LocalStorage API
+* **State Management:** React `useState` & Browser LocalStorage
 
 ## 🚀 Quick Start
 

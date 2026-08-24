@@ -1,16 +1,30 @@
-# React + Vite
+# 🎓 Campus Skill-Swap (SkillShare)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A peer-to-peer campus micro-help and skill exchange platform built for university students. It features a localized credit-based economy to encourage mutual learning, collaboration, and resource sharing.
 
-Currently, two official plugins are available:
+## ✨ Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* **Campus Domain Auth:** Restricts access to verified college email handles (`@chitkara.edu.in`) ensuring a secure, student-only environment.
+* **Credit-Based Economy:** 
+  * New users start with **200 Credits**.
+  * Earn **+10 Credits** for offering help to batchmates.
+  * Spend **-20 Credits** when requesting expert assistance.
+* **Interactive Feed & Filters:** Browse requests filtered by categories like *Programming / DSA*, *Academics & Notes*, *Music & Arts*, and *Project Partners*.
+* **Real-time Request Creation:** Post customized micro-help requests or skill offerings with *Urgent* or *Flexible* tags.
+* **Persistent Session Storage:** User credits, connections, and posts persist across sessions securely using user-scoped `localStorage`.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Frontend:** React.js, JavaScript (ES6+)
+* **Build Tool:** Vite
+* **Styling:** CSS3 (Flexbox, CSS Grid, Custom Variables)
+* **State Management:** React `useState` & Browser LocalStorage API
 
-## Expanding the ESLint configuration
+## 🚀 Quick Start
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Follow these steps to run the project locally on your machine:
+
+**1. Clone the repository**
+```bash
+git clone [https://github.com/dhairya-gera/SkillShare.git](https://github.com/dhairya-gera/SkillShare.git)
+cd SkillShare

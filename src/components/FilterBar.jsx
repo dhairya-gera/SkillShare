@@ -1,10 +1,4 @@
-const categories = [
-  "All",
-  "Programming / DSA",
-  "Academics & Notes",
-  "Music & Arts",
-  "Project Partners",
-];
+import { categories } from "../data/categories";
 
 export default function FilterBar({ filterCategory, setFilterCategory }) {
   return (
@@ -12,7 +6,7 @@ export default function FilterBar({ filterCategory, setFilterCategory }) {
       {categories.map((category) => (
         <button
           key={category}
-          className={filterCategory === category ? "filter active" : "filter"}
+          className={`filter ${filterCategory === category ? "active" : ""}`}
           onClick={() => setFilterCategory(category)}
         >
           {category}

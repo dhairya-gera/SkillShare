@@ -1,184 +1,187 @@
 import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import logoImg from "./skill-share-logo.png";
 import { initialPosts } from "./data/initialPosts";
-import Login from "./components/Login";
-import Navbar from "./components/Navbar";
-import FilterBar from "./components/FilterBar";
-import PostCard from "./components/PostCard";
-import CreatePostModal from "./components/CreatePost";
+import LoginPage from "./components/LoginPage";
+import DashboardPage from "./components/DashboardPage";
+import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ProfilePage from "./components/ProfilePage";
+import PostDetailPage from "./components/PostDetailPage";
+import HowItWorksPage from "./components/HowItWorksPage";
+import NotFoundPage from "./components/NotFoundPage";
+import {
+  ProfileOverview,
+  MyPosts,
+  Connections,
+  SavedPosts,
+} from "./components/ProfileSections";
 
-const getSavedData = (key, fallback) => {
+const STARTING_CREDITS = 200;
+const HELP_COST = 20;
+const HELP_REWARD = 10;
+
+function validatePost(values) {
+  const errors = {};
+  const text = values.text.trim();
+
+  if (!text) errors.text = "Description is required.";
+  else if (text.length < 10) {
+    errors.text = "Description must be at least 10 characters.";
+  }
+  return errors;
+}
+
+function readStorage(key, fallback) {
   try {
-    const savedValue = localStorage.getItem(key);
-    return savedValue ? JSON.parse(savedValue) : fallback;
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
   } catch (error) {
-    console.error(`Error reading or parsing localStorage key "${key}":`, error);
+    console.error(`Unable to read "${key}" from localStorage.`, error);
     return fallback;
   }
-};
+}
 
 export default function App() {
   const savedEmail = localStorage.getItem("email") || "";
+  const savedName = localStorage.getItem("name") || "";
 
-  const [currentView, setCurrentView] = useState(
-    localStorage.getItem("view") || "login",
+  const [user, setUser] = useState(
+    savedEmail ? { name: savedName, email: savedEmail } : null,
   );
-  const [email, setEmail] = useState(savedEmail);
-  const [fullName, setFullName] = useState(localStorage.getItem("name") || "");
+  const [posts, setPosts] = useState(() => readStorage("posts", initialPosts));
+  const [credits, setCredits] = useState(
+    savedEmail
+      ? Number(localStorage.getItem(`${savedEmail}_credits`)) ||
+          STARTING_CREDITS
+      : STARTING_CREDITS,
+  );
+  const [connections, setConnections] = useState(
+    savedEmail ? readStorage(`${savedEmail}_connections`, []) : [],
+  );
+  const [savedPosts, setSavedPosts] = useState(
+    savedEmail ? readStorage(`${savedEmail}_saved`, []) : [],
+  );
 
-  const [credits, setCredits] = useState(() => {
-    if (savedEmail) {
-      return Number(localStorage.getItem(`${savedEmail}_credits`)) || 200;
-    }
-    return 200;
-  });
-
-  const [posts, setPosts] = useState(() => getSavedData("posts", initialPosts));
-
-  const [connectedPostIds, setConnectedPostIds] = useState(() => {
-    if (savedEmail) {
-      return getSavedData(`${savedEmail}_connections`, []);
-    }
-    return [];
-  });
-
-  const [filterCategory, setFilterCategory] = useState("All");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  function handleAuth() {
-    setCurrentView("dashboard");
-    localStorage.setItem("view", "dashboard");
+  function handleLogin(name, email) {
+    const nextCredits =
+      Number(localStorage.getItem(`${email}_credits`)) || STARTING_CREDITS;
+    const nextConnections = readStorage(`${email}_connections`, []);
+    const nextSaved = readStorage(`${email}_saved`, []);
+    setUser({ name, email });
+    setCredits(nextCredits);
+    setConnections(nextConnections);
+    setSavedPosts(nextSaved);
+    localStorage.setItem("name", name);
     localStorage.setItem("email", email);
-    localStorage.setItem("name", fullName);
-
-    const userCreditsKey = `${email}_credits`;
-    const userConnectionsKey = `${email}_connections`;
-
-    const savedUserCredits = localStorage.getItem(userCreditsKey);
-    if (savedUserCredits) {
-      setCredits(Number(savedUserCredits));
-    } else {
-      setCredits(200);
-      localStorage.setItem(userCreditsKey, "200");
-    }
-
-    const savedUserConnections = localStorage.getItem(userConnectionsKey);
-    if (savedUserConnections) {
-      setConnectedPostIds(JSON.parse(savedUserConnections));
-    } else {
-      setConnectedPostIds([]);
-      localStorage.setItem(userConnectionsKey, JSON.stringify([]));
-    }
+    localStorage.setItem("view", "dashboard");
   }
 
   function handleLogout() {
-    setCurrentView("login");
+    setUser(null);
+    setCredits(STARTING_CREDITS);
+    setConnections([]);
+    setSavedPosts([]);
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
     localStorage.setItem("view", "login");
-    setEmail("");
-    setFullName("");
-    setCredits(200);
-    setConnectedPostIds([]);
   }
 
   function handleConnect(post) {
-    if (connectedPostIds.includes(post.id)) return;
-
-    let updatedCredits = credits;
-    if (post.type === "Offering Help") {
-      if (credits < 20) {
-        alert("Not enough credits to take this help! 🛑");
-        return;
-      }
-      updatedCredits -= 20;
-      alert(
-        `Connection request sent to ${post.name}! You spent 20 Credits. 📉`,
-      );
-    } else {
-      updatedCredits += 10;
-      alert(
-        `Thanks for offering help to ${post.name}! You earned +10 Credits. 📈`,
-      );
+    if (connections.includes(post.id)) return;
+    const takingHelp = post.type === "Offering Help";
+    if (takingHelp && credits < HELP_COST) {
+      alert("Not enough credits to take this help.");
+      return;
     }
-
-    const updatedConnections = [...connectedPostIds, post.id];
-    setCredits(updatedCredits);
-    setConnectedPostIds(updatedConnections);
-
-    localStorage.setItem(`${email}_credits`, updatedCredits);
-    localStorage.setItem(
-      `${email}_connections`,
-      JSON.stringify(updatedConnections),
+    const nextCredits = credits + (takingHelp ? -HELP_COST : HELP_REWARD);
+    const nextConnections = [...connections, post.id];
+    setCredits(nextCredits);
+    setConnections(nextConnections);
+    saveUserData(user.email, "credits", nextCredits);
+    saveUserData(user.email, "connections", nextConnections);
+    alert(
+      takingHelp
+        ? `Request sent to ${post.name}.`
+        : `You earned +${HELP_REWARD} credits.`,
     );
+  }
+
+  function handleSave(postId) {
+    const nextSaved = savedPosts.includes(postId)
+      ? savedPosts.filter((id) => id !== postId)
+      : [...savedPosts, postId];
+    setSavedPosts(nextSaved);
+    saveUserData(user.email, "saved", nextSaved);
   }
 
   function handleCreatePost(postData) {
-    const emailName = email.split("@")[0] || "Student";
-    const name =
-      fullName.trim() ||
-      `${emailName.charAt(0).toUpperCase()}${emailName.slice(1)} (You)`;
-    const newPost = { id: Date.now(), name, branch: "BTech CSE", ...postData };
-    const updatedPosts = [newPost, ...posts];
-
-    setPosts(updatedPosts);
-    localStorage.setItem("posts", JSON.stringify(updatedPosts));
+    const newPost = {
+      id: Date.now(),
+      name: user.name,
+      branch: "BTech CSE",
+      ownerEmail: user.email,
+      ...postData,
+    };
+    const nextPosts = [newPost, ...posts];
+    setPosts(nextPosts);
+    localStorage.setItem("posts", JSON.stringify(nextPosts));
   }
 
-  const visiblePosts =
-    filterCategory === "All"
-      ? posts
-      : posts.filter((post) => post.category === filterCategory);
-  const greetingName = fullName || email.split("@")[0];
-
-  if (currentView === "login") {
-    return (
-      <Login
-        logoImg={logoImg}
-        fullName={fullName}
-        setFullName={setFullName}
-        email={email}
-        setEmail={setEmail}
-        handleAuth={handleAuth}
-      />
-    );
+  function handleDeletePost(postId) {
+    const nextPosts = posts.filter((post) => post.id !== postId);
+    setPosts(nextPosts);
+    localStorage.setItem("posts", JSON.stringify(nextPosts));
   }
+
+  const sharedProps = {
+    user,
+    posts,
+    credits,
+    connections,
+    savedPosts,
+    onConnect: handleConnect,
+    onSave: handleSave,
+    onDelete: handleDeletePost,
+    onCreatePost: handleCreatePost,
+    onLogout: handleLogout,
+    validatePost,
+  };
 
   return (
-    <div className="app dash">
-      <Navbar
-        logoImg={logoImg}
-        credits={credits}
-        onOpenModal={() => setIsModalOpen(true)}
-        onLogout={handleLogout}
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <LoginPage
+            onLogin={handleLogin}
+          />
+        }
       />
-      <main className="main">
-        <section className="banner">
-          <h1>Welcome back{greetingName ? `, ${greetingName}` : ""}!</h1>
-          <p>
-            Find study partners, trade skills, or ask for help from your
-            batchmates.
-          </p>
-        </section>
-        <FilterBar
-          filterCategory={filterCategory}
-          setFilterCategory={setFilterCategory}
-        />
-        <section className="grid">
-          {visiblePosts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-              isConnected={connectedPostIds.includes(post.id)}
-              onConnect={handleConnect}
+      <Route element={<ProtectedRoute isLoggedIn={Boolean(user)} />}>
+        <Route element={<Layout {...sharedProps} />}>
+          <Route index element={<DashboardPage {...sharedProps} />} />
+          <Route
+            path="posts/:postId"
+            element={<PostDetailPage {...sharedProps} />}
+          />
+          <Route path="how-it-works" element={<HowItWorksPage />} />
+          <Route path="profile" element={<ProfilePage {...sharedProps} />}>
+            <Route index element={<ProfileOverview {...sharedProps} />} />
+            <Route path="my-posts" element={<MyPosts {...sharedProps} />} />
+            <Route
+              path="connections"
+              element={<Connections {...sharedProps} />}
             />
-          ))}
-        </section>
-      </main>
-      <CreatePostModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onCreatePost={handleCreatePost}
-      />
-    </div>
+            <Route path="saved" element={<SavedPosts {...sharedProps} />} />
+          </Route>
+        </Route>
+      </Route>
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
+}
+
+function saveUserData(email, key, value) {
+  localStorage.setItem(`${email}_${key}`, JSON.stringify(value));
 }

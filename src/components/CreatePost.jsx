@@ -1,19 +1,37 @@
 import { useState } from "react";
+import { categories } from "../data/categories";
 
-export default function CreatePostModal({ isOpen, onClose, onCreatePost }) {
-  const [text, setText] = useState("");
-  const [category, setCategory] = useState("Programming / DSA");
-  const [type, setType] = useState("Seeking Help");
-  const [status, setStatus] = useState("Flexible");
+export default function CreatePostModal({
+  isOpen,
+  onClose,
+  onCreatePost,
+  validatePost,
+}) {
+  const initialValues = {
+    text: "",
+    category: categories[1],
+    type: "Seeking Help",
+    status: "Flexible",
+  };
+  const [values, setValues] = useState(initialValues);
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
+  function handleChange(event) {
+    setValues({ ...values, [event.target.name]: event.target.value });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
-    if (!text.trim()) return;
-
-    onCreatePost({ text: text.trim(), category, type, status });
-    setText("");
+    const errors = validatePost(values);
+    if (errors.text) {
+      setError(errors.text);
+      return;
+    }
+    onCreatePost({ ...values, text: values.text.trim() });
+    setValues(initialValues);
+    setError("");
     onClose();
   }
 
@@ -26,35 +44,34 @@ export default function CreatePostModal({ isOpen, onClose, onCreatePost }) {
             ✕
           </button>
         </div>
-
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form" noValidate>
           <div className="input-box">
             <label>Description / Details</label>
             <textarea
+              name="text"
               rows="3"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              required
+              maxLength="200"
+              value={values.text}
+              onChange={handleChange}
             />
+            {error && <p className="error">{error}</p>}
           </div>
-
           <div className="input-box">
             <label>Category</label>
             <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              name="category"
+              value={values.category}
+              onChange={handleChange}
             >
-              <option>Programming / DSA</option>
-              <option>Academics & Notes</option>
-              <option>Music & Arts</option>
-              <option>Project Partners</option>
+              {categories.slice(1).map((category) => (
+                <option key={category}>{category}</option>
+              ))}
             </select>
           </div>
-
           <div className="row">
             <div className="input-box">
               <label>Post Type</label>
-              <select value={type} onChange={(e) => setType(e.target.value)}>
+              <select name="type" value={values.type} onChange={handleChange}>
                 <option>Seeking Help</option>
                 <option>Offering Help</option>
               </select>
@@ -62,15 +79,15 @@ export default function CreatePostModal({ isOpen, onClose, onCreatePost }) {
             <div className="input-box">
               <label>Urgency</label>
               <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                name="status"
+                value={values.status}
+                onChange={handleChange}
               >
                 <option>Flexible</option>
                 <option>Urgent</option>
               </select>
             </div>
           </div>
-
           <div className="actions">
             <button type="button" className="btn-border" onClick={onClose}>
               Cancel

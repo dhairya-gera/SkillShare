@@ -1,10 +1,13 @@
-export default function PostCard({ post, isConnected, onConnect }) {
+import { Link } from "react-router-dom";
+
+export default function PostCard({
+  post,
+  isConnected,
+  isSaved,
+  onConnect,
+  onToggleSave,
+}) {
   const isOffering = post.type === "Offering Help";
-  const buttonText = isConnected
-    ? "Requested"
-    : isOffering
-      ? "Take Help (-20 💰)"
-      : "Offer Help (+10 💰)";
 
   return (
     <div className="card">
@@ -16,19 +19,25 @@ export default function PostCard({ post, isConnected, onConnect }) {
             <span className="branch">{post.branch}</span>
           </div>
         </div>
-        <span
-          className={
-            post.status === "Urgent" ? "status urgent" : "status flexible"
-          }
-        >
-          {post.status}
-        </span>
+        <div className="card-top-right">
+          <button className="save-btn" onClick={() => onToggleSave(post.id)}>
+            {isSaved ? "★" : "☆"}
+          </button>
+          <span
+            className={
+              post.status === "Urgent" ? "status urgent" : "status flexible"
+            }
+          >
+            {post.status}
+          </span>
+        </div>
       </div>
       <div className="card-body">
         <span className={isOffering ? "tag offering" : "tag seeking"}>
           {post.type}
         </span>
         <p className="text">{post.text}</p>
+        <Link to={`/posts/${post.id}`} className="details-link">View details →</Link>
       </div>
       <div className="card-bottom">
         <span className="category">Category: {post.category}</span>
@@ -37,7 +46,7 @@ export default function PostCard({ post, isConnected, onConnect }) {
           onClick={() => onConnect(post)}
           disabled={isConnected}
         >
-          {buttonText}
+          {isConnected ? "Requested" : isOffering ? "Take Help (-20 💰)" : "Offer Help (+10 💰)"}
         </button>
       </div>
     </div>

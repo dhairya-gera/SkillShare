@@ -1,53 +1,32 @@
-import PostList from "./PostList";
+import { NavLink, Outlet } from "react-router-dom";
 
-export function ProfileOverview({
-  user,
-  posts,
-  connections,
-  savedPosts,
-  credits,
-}) {
-  const count = posts.filter((post) => post.ownerEmail === user.email).length;
+export default function ProfilePage({ user }) {
+  const tabClass = ({ isActive }) => `sub-link ${isActive ? "active" : ""}`;
+
   return (
-    <div className="overview">
-      {[
-        [count, "Posts created"],
-        [connections.length, "Connections made"],
-        [savedPosts.length, "Saved posts"],
-        [credits, "Credits left"],
-      ].map(([value, label]) => (
-        <div className="overview-card" key={label}>
-          <strong>{value}</strong>
-          <span>{label}</span>
+    <div>
+      <section className="banner profile-head">
+        <div className="icon big">{user.name.charAt(0)}</div>
+        <div>
+          <h1>{user.name}</h1>
+          <p>{user.email}</p>
         </div>
-      ))}
+      </section>
+      <nav className="sub-nav">
+        <NavLink to="/profile" end className={tabClass}>
+          Overview
+        </NavLink>
+        <NavLink to="my-posts" className={tabClass}>
+          My Posts
+        </NavLink>
+        <NavLink to="connections" className={tabClass}>
+          Connections
+        </NavLink>
+        <NavLink to="saved" className={tabClass}>
+          Saved
+        </NavLink>
+      </nav>
+      <Outlet />
     </div>
-  );
-}
-export function MyPosts(data) {
-  return (
-    <PostList
-      {...data}
-      posts={data.posts.filter((post) => post.ownerEmail === data.user.email)}
-      placeholder="You haven't posted anything yet."
-    />
-  );
-}
-export function Connections(data) {
-  return (
-    <PostList
-      {...data}
-      posts={data.posts.filter((post) => data.connections.includes(post.id))}
-      placeholder="No connections yet."
-    />
-  );
-}
-export function SavedPosts(data) {
-  return (
-    <PostList
-      {...data}
-      posts={data.posts.filter((post) => data.savedPosts.includes(post.id))}
-      placeholder="Nothing saved yet."
-    />
   );
 }

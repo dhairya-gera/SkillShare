@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /how-it-works
+# Private pages (need login) - no value for search engines
+Disallow: /profile
+Disallow: /posts/
+Disallow: /credits
+
+# Replace with your real deployed URL:
+Sitemap: https://your-domain.com/sitemap.xml

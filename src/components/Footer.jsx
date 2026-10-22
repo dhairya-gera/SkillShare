@@ -9,6 +9,7 @@ export default function Footer() {
       </div>
       <nav className="footer-links" aria-label="Footer navigation">
         <Link to="/">Home</Link>
+        <Link to="/credits">Credits</Link>
         <Link to="/how-it-works">How it works</Link>
         <Link to="/profile">Profile</Link>
       </nav>

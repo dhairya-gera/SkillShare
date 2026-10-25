@@ -29,19 +29,7 @@ Every campus has the same problem: someone is stuck on a DSA question at 11 PM, 
 
 ---
 
-## 🖼️ Screenshots
 
-> Add your screenshots to a `screenshots/` folder and update the paths below.
-
-| Dashboard | Post Details | Credits & Cash-out |
-| :---: | :---: | :---: |
-| ![Dashboard](screenshots/dashboard.png) | ![Post](screenshots/post.png) | ![Credits](screenshots/credits.png) |
-
-| Dark Mode | Profile | Mobile |
-| :---: | :---: | :---: |
-| ![Dark](screenshots/dark.png) | ![Profile](screenshots/profile.png) | ![Mobile](screenshots/mobile.png) |
-
----
 
 ## 🚀 Features
 

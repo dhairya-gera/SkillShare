@@ -1,6 +1,4 @@
-/* =========================================
-   Theme variables (light = default, dark = [data-theme="dark"])
-========================================= */
+
 :root {
   color-scheme: light;
   --primary: #00897b;
@@ -13,8 +11,8 @@
   --text: #0f172a;
   --muted: #64748b;
   --border: #e2e8f0;
-  --white: #ffffff; /* text colour on coloured buttons */
-  --surface: #ffffff; /* cards, nav, inputs */
+  --white: #ffffff; 
+  --surface: #ffffff; 
   --surface-2: #f1f5f9;
   --page: #f8fafc;
   --background: linear-gradient(135deg, #e0f2f1, #ffffff);
@@ -65,9 +63,7 @@
   --offering-text: #86efac;
 }
 
-/* =========================================
-   Base
-========================================= */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -94,31 +90,6 @@ button:disabled {
   outline-offset: 2px;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.skip-link {
-  position: absolute;
-  top: -50px;
-  left: 12px;
-  z-index: 2000;
-  padding: 8px 14px;
-  color: var(--white);
-  background: var(--primary);
-  border-radius: 8px;
-  text-decoration: none;
-}
-
-.skip-link:focus {
-  top: 12px;
-}
-
 .app {
   min-height: 100vh;
   min-height: 100dvh;
@@ -126,28 +97,19 @@ button:disabled {
   color: var(--text);
 }
 
-/* Logo has a white background, so give it a light tile in dark mode */
+
 [data-theme="dark"] .nav-logo,
 [data-theme="dark"] .big-logo {
   background: #fff;
   border-radius: 14px;
 }
 
-/* =========================================
-   Login page
-========================================= */
+
 .login-page {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.login-theme {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 5;
 }
 
 .login-content {
@@ -174,11 +136,6 @@ button:disabled {
   width: auto;
   height: 110px;
   margin-bottom: 8px;
-}
-
-.login-title {
-  margin-bottom: 4px;
-  font-size: 1.4rem;
 }
 
 .subtext,
@@ -214,9 +171,7 @@ button:disabled {
   border-bottom: 2px solid var(--primary);
 }
 
-/* =========================================
-   Forms
-========================================= */
+
 .form {
   display: flex;
   flex-direction: column;
@@ -267,36 +222,13 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.counter {
-  display: block;
-  margin-top: 2px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  text-align: right;
-}
-
 .error {
   margin-top: 4px;
   color: var(--error);
   font-size: 0.8rem;
 }
 
-.form-error {
-  text-align: center;
-}
 
-.success {
-  margin-bottom: 14px;
-  padding: 10px 12px;
-  color: var(--success-text);
-  background: var(--success-bg);
-  border-radius: 8px;
-  font-size: 0.85rem;
-}
-
-/* =========================================
-   Buttons
-========================================= */
 .btn,
 .btn-border,
 .btn-connect,
@@ -370,49 +302,39 @@ button:disabled {
   border-color: var(--primary);
 }
 
-/* =========================================
-   Navbar
-========================================= */
+
 .dash {
   display: flex;
   flex-direction: column;
 }
 
 .nav {
-  position: relative;
-  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 40px;
+  padding: 16px 40px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 2px 10px var(--shadow);
 }
 
-.nav-menu {
+.nav-left,
+.nav-links,
+.nav-btns {
   display: flex;
-  flex: 1;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
 }
 
-.nav-links,
-.nav-btns,
-.public-actions {
-  display: flex;
-  align-items: center;
+.nav-left {
+  gap: 24px;
 }
 
 .nav-links {
   gap: 6px;
-  margin-left: 16px;
 }
 
-.nav-btns,
-.public-actions {
+.nav-btns {
   gap: 12px;
 }
 
@@ -427,7 +349,7 @@ button:disabled {
 }
 
 .nav-link {
-  padding: 8px 12px;
+  padding: 6px 12px;
   color: var(--muted);
   border-radius: 8px;
   font-size: 0.9rem;
@@ -441,11 +363,6 @@ button:disabled {
   background: var(--primary-soft);
 }
 
-.nav-cta {
-  padding: 9px 18px;
-  font-size: 0.9rem;
-}
-
 .badge {
   padding: 6px 14px;
   color: var(--badge-text);
@@ -454,24 +371,9 @@ button:disabled {
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
 }
 
-.menu-toggle {
-  display: none;
-  width: 44px;
-  height: 44px;
-  color: var(--text);
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 1.3rem;
-}
 
-/* =========================================
-   Page layout
-========================================= */
 .main {
   flex: 1;
   width: 100%;
@@ -535,9 +437,7 @@ button:disabled {
   text-align: center;
 }
 
-/* =========================================
-   Cards, tags, status
-========================================= */
+
 .card,
 .detail-card,
 .overview-card,
@@ -720,9 +620,7 @@ button:disabled {
   text-decoration: underline;
 }
 
-/* =========================================
-   Modal
-========================================= */
+
 .overlay {
   position: fixed;
   inset: 0;
@@ -781,9 +679,7 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* =========================================
-   Post detail
-========================================= */
+
 .detail {
   display: flex;
   flex-direction: column;
@@ -816,9 +712,7 @@ button:disabled {
   overflow-wrap: anywhere;
 }
 
-/* =========================================
-   Profile
-========================================= */
+
 .profile-head {
   display: flex;
   flex-wrap: wrap;
@@ -829,10 +723,6 @@ button:disabled {
 .profile-head h1,
 .profile-head p {
   overflow-wrap: anywhere;
-}
-
-.profile-badge {
-  margin-left: auto;
 }
 
 .sub-nav {
@@ -895,17 +785,6 @@ button:disabled {
   font-size: 0.9rem;
 }
 
-.overview-link:hover {
-  border-color: var(--primary);
-}
-
-.demo-note {
-  margin-top: 28px;
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-align: center;
-}
-
 .state-box {
   display: flex;
   flex-direction: column;
@@ -927,9 +806,7 @@ button:disabled {
   text-decoration: none;
 }
 
-/* =========================================
-   Credits page
-========================================= */
+
 .credit-summary {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
@@ -954,13 +831,6 @@ button:disabled {
 .balance-card span {
   opacity: 0.9;
   font-size: 0.9rem;
-}
-
-.credits-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  align-items: start;
 }
 
 .panel {
@@ -1027,59 +897,7 @@ button:disabled {
   border-radius: 8px;
 }
 
-.tx-list {
-  display: flex;
-  flex-direction: column;
-  max-height: 420px;
-  overflow-y: auto;
-  list-style: none;
-}
 
-.tx-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.tx-icon {
-  font-size: 1.3rem;
-}
-
-.tx-text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-  gap: 2px;
-}
-
-.tx-text strong {
-  font-size: 0.9rem;
-  overflow-wrap: anywhere;
-}
-
-.tx-text small {
-  color: var(--muted);
-}
-
-.tx-amount {
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.tx-amount.plus {
-  color: var(--offering-text);
-}
-
-.tx-amount.minus {
-  color: var(--urgent-text);
-}
-
-/* =========================================
-   How it works page
-========================================= */
 .hiw {
   display: flex;
   flex-direction: column;
@@ -1291,9 +1109,7 @@ button:disabled {
   background: #e0f2f1;
 }
 
-/* =========================================
-   Footer
-========================================= */
+
 .footer {
   display: flex;
   align-items: center;
@@ -1335,22 +1151,12 @@ button:disabled {
   white-space: nowrap;
 }
 
-/* =========================================
-   Responsive
-========================================= */
 
-/* Laptops / small desktops */
+
+
 @media (max-width: 1100px) {
-  .nav {
-    padding: 12px 24px;
-  }
-
   .main {
     padding: 28px 24px;
-  }
-
-  .nav-link {
-    padding: 8px 10px;
   }
 
   .theme-label {
@@ -1358,56 +1164,7 @@ button:disabled {
   }
 }
 
-/* Tablets and phones: hamburger menu */
 @media (max-width: 900px) {
-  .nav {
-    flex-wrap: wrap;
-    padding: 10px 20px;
-  }
-
-  .menu-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .nav-menu {
-    display: none;
-    flex-basis: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-    padding: 12px 0 8px;
-    border-top: 1px solid var(--border);
-  }
-
-  .nav-menu.open {
-    display: flex;
-  }
-
-  .nav-links {
-    flex-direction: column;
-    align-items: stretch;
-    margin-left: 0;
-  }
-
-  .nav-link {
-    padding: 12px;
-  }
-
-  .nav-btns {
-    flex-wrap: wrap;
-  }
-
-  .nav-btns .btn-border,
-  .nav-btns .btn-red {
-    min-height: 44px;
-  }
-
-  .theme-label {
-    display: inline;
-  }
-
   .credit-summary {
     grid-template-columns: 1fr 1fr;
   }
@@ -1416,13 +1173,18 @@ button:disabled {
     grid-column: 1 / -1;
   }
 
-  .credits-layout {
-    grid-template-columns: 1fr;
-  }
 }
 
-/* Phones */
 @media (max-width: 720px) {
+  .nav {
+    flex-wrap: wrap;
+  }
+
+  .nav-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .main {
     padding: 22px 16px;
   }
@@ -1454,10 +1216,6 @@ button:disabled {
     padding: 20px;
   }
 
-  .profile-badge {
-    margin-left: 0;
-  }
-
   .hiw {
     gap: 32px;
   }
@@ -1466,12 +1224,9 @@ button:disabled {
     padding: 32px 18px;
   }
 
-  .public-actions .nav-link {
-    display: none;
-  }
 }
 
-/* Small phones */
+
 @media (max-width: 480px) {
   .box {
     padding: 28px 20px;
@@ -1536,7 +1291,7 @@ button:disabled {
   }
 }
 
-/* Very large screens */
+
 @media (min-width: 1600px) {
   .main {
     max-width: 1360px;

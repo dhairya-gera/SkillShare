@@ -1,9 +1,14 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logoImg from "../skill-share-logo.png";
+import ThemeToggle from "./ThemeToggle";
 
-const linkClass = ({ isActive }) => (isActive ? "nav-link active" : "nav-link");
-
-export default function Navbar({ credits, onOpenModal, onLogout }) {
+export default function Navbar({
+  credits,
+  theme,
+  onToggleTheme,
+  onOpenModal,
+  onLogout,
+}) {
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -17,23 +22,56 @@ export default function Navbar({ credits, onOpenModal, onLogout }) {
         <Link to="/" className="logo-box">
           <img src={logoImg} alt="Skill Share logo" className="nav-logo" />
         </Link>
+
         <nav className="nav-links">
-          <NavLink to="/" end className={linkClass}>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
             Home
           </NavLink>
-          <NavLink to="/profile" className={linkClass}>
+
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
             Profile
           </NavLink>
-          <NavLink to="/how-it-works" className={linkClass}>
+
+          <NavLink
+            to="/how-it-works"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
             How it works
+          </NavLink>
+
+          <NavLink
+            to="/credits"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Credits
           </NavLink>
         </nav>
       </div>
+
       <div className="nav-btns">
+        <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
+
         <span className="badge">💰 {credits} Credits</span>
+
         <button className="btn-border" onClick={onOpenModal}>
           + Post a Request
         </button>
+
         <button className="btn-red" onClick={handleLogout}>
           Logout
         </button>

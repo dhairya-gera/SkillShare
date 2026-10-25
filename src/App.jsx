@@ -13,7 +13,6 @@ import {
 import LoginPage from "./components/LoginPage";
 import DashboardPage from "./components/DashboardPage";
 import Layout from "./components/Layout";
-import PublicLayout from "./components/PublicLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./components/ProfilePage";
 import PostDetailPage from "./components/PostDetailPage";
@@ -28,14 +27,14 @@ import {
 } from "./components/ProfileSections";
 
 function validatePost(values) {
-  const errors = {};
   const text = values.text.trim();
 
-  if (!text) errors.text = "Description is required.";
-  else if (text.length < 10) {
-    errors.text = "Description must be at least 10 characters.";
+  if (!text) return { text: "Description is required." };
+  if (text.length < 10) {
+    return { text: "Description must be at least 10 characters." };
   }
-  return errors;
+
+  return {};
 }
 
 function readStorage(key, fallback) {
@@ -48,8 +47,6 @@ function readStorage(key, fallback) {
   }
 }
 
-// BUG FIX: the old code used `Number(saved) || 200`, so a balance of 0
-// was treated as "empty" and silently reset to 200 credits.
 function readCredits(email) {
   const saved = localStorage.getItem(`${email}_credits`);
   return saved === null ? STARTING_CREDITS : Number(saved);
@@ -61,7 +58,9 @@ function saveUserData(email, key, value) {
 
 function getInitialTheme() {
   const saved = localStorage.getItem("theme");
+
   if (saved === "light" || saved === "dark") return saved;
+
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
@@ -71,7 +70,11 @@ export default function App() {
   const [user, setUser] = useState(() => {
     const email = localStorage.getItem("email");
     if (!email) return null;
-    return { name: localStorage.getItem("name") || email.split("@")[0], email };
+
+    return {
+      name: localStorage.getItem("name") || email.split("@")[0],
+      email,
+    };
   });
   const [posts, setPosts] = useState(() => readStorage("posts", initialPosts));
   const [credits, setCredits] = useState(() =>
@@ -88,7 +91,6 @@ export default function App() {
   );
   const [theme, setTheme] = useState(getInitialTheme);
 
-  // Apply the theme to <html data-theme="..."> so CSS variables switch
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document
@@ -97,34 +99,36 @@ export default function App() {
   }, [theme]);
 
   function handleToggleTheme() {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    localStorage.setItem("theme", nextTheme);
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
   }
 
-  // ---------- Accounts (demo only: stored in localStorage) ----------
   function handleSignup(name, email, password) {
     const accounts = readStorage("accounts", {});
+
     if (accounts[email]) {
       return {
         ok: false,
         error: "An account with this email already exists. Please log in.",
       };
     }
+
     accounts[email] = { name, password };
     localStorage.setItem("accounts", JSON.stringify(accounts));
     return { ok: true };
   }
 
-  // BUG FIX: login used to accept ANY password and never checked the account.
   function handleLogin(email, password) {
     const account = readStorage("accounts", {})[email];
+
     if (!account) {
       return {
         ok: false,
         error: "No account found for this email. Please sign up first.",
       };
     }
+
     if (account.password !== password) {
       return { ok: false, error: "Incorrect password." };
     }
@@ -136,6 +140,7 @@ export default function App() {
     setTransactions(readStorage(`${email}_transactions`, []));
     localStorage.setItem("name", account.name);
     localStorage.setItem("email", email);
+
     return { ok: true };
   }
 
@@ -149,40 +154,42 @@ export default function App() {
     localStorage.removeItem("email");
   }
 
-  // ---------- Credits ----------
   function recordTransaction(entry) {
-    const next = [
+    const newTransactions = [
       { id: Date.now(), date: new Date().toISOString(), ...entry },
       ...transactions,
-    ].slice(0, 50); // keep the last 50 only
-    setTransactions(next);
-    saveUserData(user.email, "transactions", next);
+    ].slice(0, 50);
+
+    setTransactions(newTransactions);
+    saveUserData(user.email, "transactions", newTransactions);
   }
 
   function handleConnect(post) {
     if (connections.includes(post.id)) return;
 
-    // BUG FIX: users could "offer help" on their own post and farm credits.
     if (post.ownerEmail === user.email) {
       alert("You can't connect with your own post.");
       return;
     }
 
     const takingHelp = post.type === "Offering Help";
+
     if (takingHelp && credits < HELP_COST) {
       alert("Not enough credits to take this help.");
       return;
     }
-    const change = takingHelp ? -HELP_COST : HELP_REWARD;
-    const nextCredits = credits + change;
-    const nextConnections = [...connections, post.id];
-    setCredits(nextCredits);
-    setConnections(nextConnections);
-    saveUserData(user.email, "credits", nextCredits);
-    saveUserData(user.email, "connections", nextConnections);
+
+    const creditChange = takingHelp ? -HELP_COST : HELP_REWARD;
+    const newCredits = credits + creditChange;
+    const newConnections = [...connections, post.id];
+
+    setCredits(newCredits);
+    setConnections(newConnections);
+    saveUserData(user.email, "credits", newCredits);
+    saveUserData(user.email, "connections", newConnections);
     recordTransaction({
       type: takingHelp ? "spent" : "earned",
-      credits: Math.abs(change),
+      credits: Math.abs(creditChange),
       note: takingHelp
         ? `Took help from ${post.name}`
         : `Offered help to ${post.name}`,
@@ -198,26 +205,29 @@ export default function App() {
     if (!Number.isInteger(amount) || amount < MIN_CASHOUT || amount > credits) {
       return { ok: false, error: "Invalid cash-out amount." };
     }
+
     const rupees = creditsToRupees(amount);
-    const nextCredits = credits - amount;
-    setCredits(nextCredits);
-    saveUserData(user.email, "credits", nextCredits);
+    const newCredits = credits - amount;
+
+    setCredits(newCredits);
+    saveUserData(user.email, "credits", newCredits);
     recordTransaction({
       type: "cashout",
       credits: amount,
       rupees,
       note: `Cash out to ${maskUpi(upiId)}`,
     });
-    return { ok: true, rupees, balance: nextCredits };
+
+    return { ok: true, rupees, balance: newCredits };
   }
 
-  // ---------- Posts ----------
   function handleSave(postId) {
-    const nextSaved = savedPosts.includes(postId)
+    const newSavedPosts = savedPosts.includes(postId)
       ? savedPosts.filter((id) => id !== postId)
       : [...savedPosts, postId];
-    setSavedPosts(nextSaved);
-    saveUserData(user.email, "saved", nextSaved);
+
+    setSavedPosts(newSavedPosts);
+    saveUserData(user.email, "saved", newSavedPosts);
   }
 
   function handleCreatePost(postData) {
@@ -228,15 +238,16 @@ export default function App() {
       ownerEmail: user.email,
       ...postData,
     };
-    const nextPosts = [newPost, ...posts];
-    setPosts(nextPosts);
-    localStorage.setItem("posts", JSON.stringify(nextPosts));
+    const newPosts = [newPost, ...posts];
+
+    setPosts(newPosts);
+    localStorage.setItem("posts", JSON.stringify(newPosts));
   }
 
   function handleDeletePost(postId) {
-    const nextPosts = posts.filter((post) => post.id !== postId);
-    setPosts(nextPosts);
-    localStorage.setItem("posts", JSON.stringify(nextPosts));
+    const newPosts = posts.filter((post) => post.id !== postId);
+    setPosts(newPosts);
+    localStorage.setItem("posts", JSON.stringify(newPosts));
   }
 
   const sharedProps = {
@@ -261,25 +272,8 @@ export default function App() {
     <Routes>
       <Route
         path="/login"
-        element={
-          <LoginPage
-            user={user}
-            onLogin={handleLogin}
-            onSignup={handleSignup}
-            theme={theme}
-            onToggleTheme={handleToggleTheme}
-          />
-        }
+        element={<LoginPage onLogin={handleLogin} onSignup={handleSignup} />}
       />
-
-      {/* Public page (good for SEO): logged-in users see it inside the app layout */}
-      <Route
-        element={
-          user ? <Layout {...sharedProps} /> : <PublicLayout {...sharedProps} />
-        }
-      >
-        <Route path="how-it-works" element={<HowItWorksPage user={user} />} />
-      </Route>
 
       <Route element={<ProtectedRoute isLoggedIn={Boolean(user)} />}>
         <Route element={<Layout {...sharedProps} />}>
@@ -288,6 +282,7 @@ export default function App() {
             path="posts/:postId"
             element={<PostDetailPage {...sharedProps} />}
           />
+          <Route path="how-it-works" element={<HowItWorksPage user={user} />} />
           <Route path="credits" element={<CreditsPage {...sharedProps} />} />
           <Route path="profile" element={<ProfilePage {...sharedProps} />}>
             <Route index element={<ProfileOverview {...sharedProps} />} />
@@ -300,6 +295,7 @@ export default function App() {
           </Route>
         </Route>
       </Route>
+
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

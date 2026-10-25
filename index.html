@@ -4,92 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Apply saved / system theme BEFORE first paint (prevents a white flash in dark mode) -->
-    <script>
-      (function () {
-        try {
-          var saved = localStorage.getItem("theme");
-          var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-          document.documentElement.dataset.theme = saved || (dark ? "dark" : "light");
-        } catch (e) {}
-      })();
-    </script>
-
-    <title>SkillShare | Campus skill exchange for students</title>
-    <meta
-      name="description"
-      content="SkillShare is a campus-only platform where college students trade skills, get study help, find project partners and earn credits they can cash out."
-    />
-    <meta
-      name="keywords"
-      content="college skill sharing, student help, peer learning, study partners, campus community, project partners"
-    />
-    <meta name="author" content="SkillShare" />
-    <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#00897b" />
-    <meta name="color-scheme" content="light dark" />
-    <link rel="canonical" href="%VITE_SITE_URL%/" />
-
-    <!-- Icons & manifest -->
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Open Graph (WhatsApp, LinkedIn, Facebook previews) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="SkillShare" />
-    <meta property="og:title" content="SkillShare | Campus skill exchange for students" />
-    <meta
-      property="og:description"
-      content="Trade skills, get study help and earn credits with students from your campus."
-    />
-    <meta property="og:url" content="%VITE_SITE_URL%/" />
-    <meta property="og:image" content="%VITE_SITE_URL%/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="SkillShare logo with the text Trade skills. Get campus help." />
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    <!-- Twitter / X card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="SkillShare | Campus skill exchange for students" />
-    <meta
-      name="twitter:description"
-      content="Trade skills, get study help and earn credits with students from your campus."
-    />
-    <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.png" />
-
-    <!-- Fonts: loaded here (not via CSS @import) so they don't block rendering -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Structured data (helps Google understand the site) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "SkillShare",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Any (web browser)",
-        "description": "Campus-only platform where students trade skills, get study help and earn credits.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
-      }
+        document.documentElement.dataset.theme =
+          theme || (dark ? "dark" : "light");
+      })();
     </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <title>SkillShare</title>
   </head>
+
   <body>
     <div id="root"></div>
-    <noscript>
-      <main style="padding: 24px; font-family: sans-serif">
-        <h1>SkillShare</h1>
-        <p>
-          SkillShare is a campus-only platform where students trade skills, get study help, find
-          project partners and earn credits. Please enable JavaScript to use the app.
-        </p>
-      </main>
-    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -41,7 +41,7 @@ function validateSignup(values) {
   return errors;
 }
 
-export default function LoginPage({ onLogin }) {
+export default function LoginPage({ onLogin, onSignup }) {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [values, setValues] = useState(emptySignup);
@@ -54,22 +54,35 @@ export default function LoginPage({ onLogin }) {
   function handleSubmit(event) {
     event.preventDefault();
 
-    const errors = isLogin ? validateLogin(values) : validateSignup(values);
-    setErrors(errors);
+    const nextErrors = isLogin ? validateLogin(values) : validateSignup(values);
+    setErrors(nextErrors);
 
-    if (Object.keys(errors).length > 0) {
+    if (Object.keys(nextErrors).length > 0) {
       return;
     }
 
     if (!isLogin) {
+      const result = onSignup(
+        values.name.trim(),
+        values.email.trim().toLowerCase(),
+        values.password,
+      );
+      if (!result.ok) {
+        setErrors({ form: result.error });
+        return;
+      }
       alert("Account created successfully! Please log in.");
       setIsLogin(true);
       setValues({ ...emptySignup, email: values.email });
       return;
     }
 
-    const name = values.name || values.email.split("@")[0];
-    onLogin(name, values.email);
+    const email = values.email.trim().toLowerCase();
+    const result = onLogin(email, values.password);
+    if (!result.ok) {
+      setErrors({ form: result.error });
+      return;
+    }
     navigate("/");
   }
 
@@ -80,70 +93,71 @@ export default function LoginPage({ onLogin }) {
           <img src={logoImg} alt="Skill Share logo" className="big-logo" />
           <p className="subtext">Connect, Learn, and Grow together.</p>
           <div className="tabs">
-          <button
-            className={`tab ${isLogin ? "active" : ""}`}
-            onClick={() => setIsLogin(true)}
-          >
-            Log In
-          </button>
-          <button
-            className={`tab ${!isLogin ? "active" : ""}`}
-            onClick={() => setIsLogin(false)}
-          >
-            Sign Up
-          </button>
+            <button
+              className={`tab ${isLogin ? "active" : ""}`}
+              onClick={() => setIsLogin(true)}
+            >
+              Log In
+            </button>
+            <button
+              className={`tab ${!isLogin ? "active" : ""}`}
+              onClick={() => setIsLogin(false)}
+            >
+              Sign Up
+            </button>
           </div>
+          {errors.form && <p className="error">{errors.form}</p>}
           <form onSubmit={handleSubmit} className="form" noValidate>
-          {!isLogin && (
+            {!isLogin && (
+              <div className="input-box">
+                <label>Full Name</label>
+                <input
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange}
+                  placeholder="e.g. John Doe"
+                />
+                {errors.name && <p className="error">{errors.name}</p>}
+              </div>
+            )}
             <div className="input-box">
-              <label>Full Name</label>
+              <label>College Email</label>
               <input
-                name="name"
-                value={values.name}
+                name="email"
+                type="email"
+                value={values.email}
                 onChange={handleChange}
-                placeholder="e.g. John Doe"
+                placeholder="student@mail.edu.in"
               />
-              {errors.name && <p className="error">{errors.name}</p>}
+              {errors.email && <p className="error">{errors.email}</p>}
             </div>
-          )}
-          <div className="input-box">
-            <label>College Email</label>
-            <input
-              name="email"
-              type="email"
-              value={values.email}
-              onChange={handleChange}
-              placeholder="student@mail.edu.in"
-            />
-            {errors.email && <p className="error">{errors.email}</p>}
-          </div>
-          <div className="input-box">
-            <label>Password</label>
-            <input
-              name="password"
-              type="password"
-              value={values.password}
-              onChange={handleChange}
-              placeholder="Min. 6 characters"
-            />
-            {errors.password && <p className="error">{errors.password}</p>}
-          </div>
-          {!isLogin && (
             <div className="input-box">
-              <label>Confirm Password</label>
+              <label>Password</label>
               <input
-                name="confirm"
+                name="password"
                 type="password"
-                value={values.confirm}
+                value={values.password}
                 onChange={handleChange}
-                placeholder="Enter your password again"
+                placeholder="Min. 6 characters"
               />
-              {errors.confirm && <p className="error">{errors.confirm}</p>}
+              {errors.password && <p className="error">{errors.password}</p>}
             </div>
-          )}
-          <button type="submit" className="btn">
-            {isLogin ? "Access Dashboard" : "Create Account"}
-          </button>
+            {!isLogin && (
+              <div className="input-box">
+                <label>Confirm Password</label>
+                <input
+                  name="confirm"
+                  type="password"
+                  value={values.confirm}
+                  onChange={handleChange}
+                  placeholder="Enter your password again"
+                />
+                {errors.confirm && <p className="error">{errors.confirm}</p>}
+              </div>
+            )}
+            <button type="submit" className="btn">
+              {isLogin ? "Access Dashboard" : "Create Account"}
+            </button>
           </form>
         </div>
       </div>

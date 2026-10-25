@@ -12,16 +12,21 @@ export default function DashboardPage({
 }) {
   const [filterCategory, setFilterCategory] = useState("All");
   const [query, setQuery] = useState("");
-  const search = query.toLowerCase();
-  const visiblePosts = posts.filter((post) => {
+
+  function filterPosts(post) {
     const categoryMatches =
       filterCategory === "All" || post.category === filterCategory;
+
+    const searchText = query.toLowerCase();
+
     const textMatches =
-      !search ||
-      post.text.toLowerCase().includes(search) ||
-      post.name.toLowerCase().includes(search);
+      post.text.toLowerCase().includes(searchText) ||
+      post.name.toLowerCase().includes(searchText);
+
     return categoryMatches && textMatches;
-  });
+  }
+
+  const visiblePosts = posts.filter(filterPosts);
 
   return (
     <>
@@ -29,6 +34,7 @@ export default function DashboardPage({
         <h1>Welcome back, {user.name}!</h1>
         <p>Find study partners, share skills, or ask classmates for help.</p>
       </section>
+
       <section className="toolbar">
         <input
           className="search"
@@ -38,10 +44,12 @@ export default function DashboardPage({
           onChange={(event) => setQuery(event.target.value)}
         />
       </section>
+
       <FilterBar
         filterCategory={filterCategory}
         setFilterCategory={setFilterCategory}
       />
+
       <PostList
         posts={visiblePosts}
         connections={connections}

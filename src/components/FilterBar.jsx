@@ -3,15 +3,23 @@ import { categories } from "../data/categories";
 export default function FilterBar({ filterCategory, setFilterCategory }) {
   return (
     <section className="filters">
-      {categories.map((category) => (
-        <button
-          key={category}
-          className={`filter ${filterCategory === category ? "active" : ""}`}
-          onClick={() => setFilterCategory(category)}
-        >
-          {category}
-        </button>
-      ))}
+      {categories.map((category) => {
+        let buttonClass = "filter";
+
+        if (filterCategory === category) {
+          buttonClass = "filter active";
+        }
+
+        return (
+          <button
+            key={category}
+            className={buttonClass}
+            onClick={() => setFilterCategory(category)}
+          >
+            {category}
+          </button>
+        );
+      })}
     </section>
   );
 }

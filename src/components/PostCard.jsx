@@ -37,7 +37,9 @@ export default function PostCard({
           {post.type}
         </span>
         <p className="text">{post.text}</p>
-        <Link to={`/posts/${post.id}`} className="details-link">View details →</Link>
+        <Link to={`/posts/${post.id}`} className="details-link">
+          View details →
+        </Link>
       </div>
       <div className="card-bottom">
         <span className="category">Category: {post.category}</span>
@@ -46,7 +48,11 @@ export default function PostCard({
           onClick={() => onConnect(post)}
           disabled={isConnected}
         >
-          {isConnected ? "Requested" : isOffering ? "Take Help (-20 💰)" : "Offer Help (+10 💰)"}
+          {isConnected
+            ? "Requested"
+            : isOffering
+              ? "Take Help (-20 💰)"
+              : "Offer Help (+10 💰)"}
         </button>
       </div>
     </div>

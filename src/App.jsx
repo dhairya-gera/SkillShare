@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { initialPosts } from "./data/initialPosts";
@@ -56,16 +56,6 @@ function saveUserData(email, key, value) {
   localStorage.setItem(`${email}_${key}`, JSON.stringify(value));
 }
 
-function getInitialTheme() {
-  const saved = localStorage.getItem("theme");
-
-  if (saved === "light" || saved === "dark") return saved;
-
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
 export default function App() {
   const [user, setUser] = useState(() => {
     const email = localStorage.getItem("email");
@@ -89,21 +79,6 @@ export default function App() {
   const [transactions, setTransactions] = useState(() =>
     user ? readStorage(`${user.email}_transactions`, []) : [],
   );
-  const [theme, setTheme] = useState(getInitialTheme);
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", theme === "dark" ? "#0b1220" : "#00897b");
-  }, [theme]);
-
-  function handleToggleTheme() {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  }
-
   function handleSignup(name, email, password) {
     const accounts = readStorage("accounts", {});
 
@@ -257,8 +232,6 @@ export default function App() {
     connections,
     savedPosts,
     transactions,
-    theme,
-    onToggleTheme: handleToggleTheme,
     onConnect: handleConnect,
     onSave: handleSave,
     onDelete: handleDeletePost,

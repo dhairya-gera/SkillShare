@@ -9,18 +9,6 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <script>
-      (function () {
-        const theme = localStorage.getItem("theme");
-        const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-        document.documentElement.dataset.theme =
-          theme || (dark ? "dark" : "light");
-      })();
-    </script>
-
-    <meta name="color-scheme" content="light dark" />
-
     <title>SkillShare</title>
   </head>
 

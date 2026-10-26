@@ -6,8 +6,6 @@ import Footer from "./Footer";
 
 export default function Layout({
   credits,
-  theme,
-  onToggleTheme,
   onLogout,
   onCreatePost,
   validatePost,
@@ -18,8 +16,6 @@ export default function Layout({
     <div className="app dash">
       <Navbar
         credits={credits}
-        theme={theme}
-        onToggleTheme={onToggleTheme}
         onOpenModal={() => setIsModalOpen(true)}
         onLogout={onLogout}
       />

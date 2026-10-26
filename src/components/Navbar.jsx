@@ -1,11 +1,8 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logoImg from "../skill-share-logo.png";
-import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar({
   credits,
-  theme,
-  onToggleTheme,
   onOpenModal,
   onLogout,
 }) {
@@ -64,8 +61,6 @@ export default function Navbar({
       </div>
 
       <div className="nav-btns">
-        <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
-
         <span className="badge">💰 {credits} Credits</span>
 
         <button className="btn-border" onClick={onOpenModal}>

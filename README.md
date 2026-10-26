@@ -71,7 +71,7 @@ Every campus has the same problem: someone is stuck on a DSA question at 11 PM, 
 | Route | Page | Access |
 | --- | --- | :-: |
 | `/login` | Login and signup | 🌍 Public |
-| `/how-it-works` | Steps, credit rules, FAQ | 🌍 Public |
+| `/how-it-works` | Steps, credit rules, FAQ | 🔒 Login  |
 | `/` | Dashboard with all posts | 🔒 Login |
 | `/posts/:postId` | Single post details | 🔒 Login |
 | `/credits` | Balance, cash-out, history | 🔒 Login |

@@ -44,10 +44,9 @@ Every campus has the same problem: someone is stuck on a DSA question at 11 PM, 
 | 💸 | **Cash-out** | Convert credits to UPI payout (demo only) |
 | 👤 | **Profiles** | Overview, my posts, connections, saved posts |
 | 📱 | **Responsive** | Works on phones, tablets, and laptops |
+| 🌙 | **Dark Mode** | Toggle between light and dark themes for a comfortable viewing experience |
 | 🔍 | **SEO** | Per-route title, description, canonical, robots tags |
 | 💾 | **Persistence** | Everything is stored in `localStorage` |
-
----
 
 ## 🪙 How Credits Work
 

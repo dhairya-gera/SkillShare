@@ -52,7 +52,7 @@ Every campus has the same problem: someone is stuck on a DSA question at 11 PM, 
 ## 🪙 How Credits Work
 
 ```text
- New user ──► 200 credits 🎁
+ New user ──► 200 credits 🎁 
  Offer help ──► +10 credits
  Take help  ──► −20 credits
  Cash out   ──► 1 credit = ₹0.50  (minimum 50 credits)

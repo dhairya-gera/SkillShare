@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤝 SkillShare
+#  SkillShare
 
 ### Stuck on something? Someone on campus is great at it.
 
@@ -17,7 +17,7 @@ Ask for help. Offer help. Earn credits. Cash out.
 
 </div>
 
----
+
 
 ## ✨ What is SkillShare?
 
@@ -168,7 +168,7 @@ The repo is Vercel-ready. `vercel.json` rewrites every route to `index.html`, so
 
 This is a **frontend-only college project**. There is no real backend, no real authentication, and no real payments. Data lives in your browser and can be cleared at any time. Please don't use real passwords or real UPI details.
 
----
+
 
 ## 🗺️ Roadmap
 
@@ -178,7 +178,7 @@ This is a **frontend-only college project**. There is no real backend, no real a
 - [ ] Notifications
 - [ ] Campus-wise communities
 
----
+
 
 ## 👨‍💻 Author
 

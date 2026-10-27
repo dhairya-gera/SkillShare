@@ -7,6 +7,18 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
 
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        document.documentElement.dataset.theme =
+          theme || (dark ? "dark" : "light");
+      })();
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
     <title>SkillShare</title>
   </head>
 

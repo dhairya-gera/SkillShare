@@ -43,7 +43,6 @@ Every campus has the same problem: someone is stuck on a DSA question at 11 PM, 
 | 💰 | **Credits** | Earn and spend credits, with a full history |
 | 💸 | **Cash-out** | Convert credits to UPI payout (demo only) |
 | 👤 | **Profiles** | Overview, my posts, connections, saved posts |
-| 🌗 | **Dark Mode** | Follows your device theme, saved for next visit |
 | 📱 | **Responsive** | Works on phones, tablets, and laptops |
 | 🔍 | **SEO** | Per-route title, description, canonical, robots tags |
 | 💾 | **Persistence** | Everything is stored in `localStorage` |
@@ -143,12 +142,6 @@ Open the local URL shown in your terminal. 🎉
 1. Go to `/login` and **sign up** with any email ending in `@mail.edu.in` (example: `test@mail.edu.in`)
 2. Use a password with at least 6 characters
 3. **Log in** with the same details (accounts live in your browser's `localStorage`)
-
----
-
-## 🌗 Dark Mode
-
-The toggle sits in the navbar (and on the login page). Your choice is saved in `localStorage`; on the first visit the app follows your device theme. Colors are CSS variables in `App.css`, switched with `<html data-theme="dark">`.
 
 ---
 
